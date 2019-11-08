@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         edmonth = findViewById(R.id.month);
         ednext = findViewById(R.id.next);
     }
-
     public void calculate(View v){
         /*錯誤的地方...why?
         String num = String.valueOf(edmonth.getText().toString().isEmpty());
@@ -54,20 +53,17 @@ public class MainActivity extends AppCompatActivity {
                 ednext.setText("");
             }
         };
-
         float supplement;
         float price = 0; //要用它計算時就得設初值，不然會出錯
+        String title = "每月抄表費用";//上面有設值，下面settitle就不用設了，下面的message也是，如果要寫很多類似功能，但title都不一樣，就可以先不設值，只改下面的title內容即可
+        String message ;
 
-        if(TextUtils.isEmpty(edmonth.getText())&&TextUtils.isEmpty(ednext.getText())){
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("錯誤")
-                    .setMessage("無法計算")
-                    .setPositiveButton("ok",listener)
-                    .show();
+        if(TextUtils.isEmpty(edmonth.getText())&&TextUtils.isEmpty(ednext.getText())){ //發現：如果嫌棄TextUtils礙眼，可以利用電燈泡將其加到import中
+            title = "錯誤";
+            message = "無法計算";
 
         }else if(!TextUtils.isEmpty(edmonth.getText())){
             float useddegrees = Float.parseFloat(edmonth.getText().toString());
-            //int useddegrees = Integer.parseInt(edmonth.getText().toString());
             if(useddegrees <11){
                 supplement = 0 ;
                 price = useddegrees * 7.35f + supplement;
@@ -82,15 +78,10 @@ public class MainActivity extends AppCompatActivity {
                 supplement = 110.25f ;
                 price = useddegrees * 12.075f + supplement;
             }
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("每月抄表費用")
-                    .setMessage("費用:" + price)
-                    .setPositiveButton("ok",listener)
-                    .show();
+            message = String.valueOf(price);
         }
         else{
             float useddegrees = Float.parseFloat(ednext.getText().toString());
-            //int useddegrees = Integer.parseInt(edmonth.getText().toString());
             if(useddegrees <11){
                 supplement = 0 ;
                 price = useddegrees * 7.35f + supplement;
@@ -105,15 +96,15 @@ public class MainActivity extends AppCompatActivity {
                 supplement = 220.5f ;
                 price = useddegrees * 12.075f + supplement;
             }
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("每月抄表費用")
-                    .setMessage("費用:" + price)
-                    .setPositiveButton("ok",listener)
-                    .show();
+            message = String.valueOf(price);
         }
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle(title)
+                .setMessage("費用: " + message)
+                .setPositiveButton("ok",listener)
+                .show();
 
     }
-
 
 
 
