@@ -1,5 +1,6 @@
 package com.fju.water3;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,48 +44,72 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void calculate(View v){
-
+        /*錯誤的地方...why?
         String num = String.valueOf(edmonth.getText().toString().isEmpty());
-        String num2 = String.valueOf(ednext.getText().toString().isEmpty());
-
-        /*boolean isEmpty(){
-            if (num == null || num.length() == 0) {
-                return true;
-            } else {
-                return false;
+        String num2 = String.valueOf(ednext.getText().toString().isEmpty());*/
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                edmonth.setText("");
+                ednext.setText("");
             }
-        }*/
-        if(false){
-            float n = Float.parseFloat(num);
-            if(n <11){
-                n = n * 7.35f;
-            }else if (n < 31){
-                n = n * 9.45f;
-            }else if (n < 51){
-                n = n *11.55f;
+        };
+
+        float supplement;
+        float price = 0; //要用它計算時就得設初值，不然會出錯
+
+        if(TextUtils.isEmpty(edmonth.getText())&&TextUtils.isEmpty(ednext.getText())){
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("錯誤")
+                    .setMessage("無法計算")
+                    .setPositiveButton("ok",listener)
+                    .show();
+
+        }else if(!TextUtils.isEmpty(edmonth.getText())){
+            float useddegrees = Float.parseFloat(edmonth.getText().toString());
+            //int useddegrees = Integer.parseInt(edmonth.getText().toString());
+            if(useddegrees <11){
+                supplement = 0 ;
+                price = useddegrees * 7.35f + supplement;
+            }else if (useddegrees < 31){
+                supplement = 21 ;
+                price = useddegrees * 9.45f + supplement;
+            }else if (useddegrees < 51){
+                supplement = 84 ;
+                price = useddegrees * 11.55f + supplement;
+
             }else {
-                n = n * 12.075f;
+                supplement = 110.25f ;
+                price = useddegrees * 12.075f + supplement;
             }
             new AlertDialog.Builder(MainActivity.this)
                     .setTitle("每月抄表費用")
-                    .setMessage("費用:" + n)
+                    .setMessage("費用:" + price)
+                    .setPositiveButton("ok",listener)
                     .show();
-        }else {
-            float n2 = Float.parseFloat(num2);
-            if(n2 <20){
-                n2 = n2 * 7.35f;
-            }else if (n2 < 60){
-                n2 = n2 * 9.45f + 21;
-            }else if (n2 < 100){
-                n2 = n2 *11.55f + 84;
+        }
+        else{
+            float useddegrees = Float.parseFloat(ednext.getText().toString());
+            //int useddegrees = Integer.parseInt(edmonth.getText().toString());
+            if(useddegrees <11){
+                supplement = 0 ;
+                price = useddegrees * 7.35f + supplement;
+            }else if (useddegrees < 31){
+                supplement = 42 ;
+                price = useddegrees * 9.45f + supplement;
+            }else if (useddegrees < 51){
+                supplement = 168 ;
+                price = useddegrees * 11.55f + supplement;
+
             }else {
-                n2 = n2 * 12.075f + 110.25f;
+                supplement = 220.5f ;
+                price = useddegrees * 12.075f + supplement;
             }
             new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("隔月抄表費用")
-                    .setMessage("費用:" + n2)
+                    .setTitle("每月抄表費用")
+                    .setMessage("費用:" + price)
+                    .setPositiveButton("ok",listener)
                     .show();
-
         }
 
     }
