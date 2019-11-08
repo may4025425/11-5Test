@@ -43,9 +43,23 @@ public class MainActivity extends AppCompatActivity {
         ednext = findViewById(R.id.next);
     }
     public void calculate(View v){
-        /*錯誤的地方...why?
-        String num = String.valueOf(edmonth.getText().toString().isEmpty());
-        String num2 = String.valueOf(ednext.getText().toString().isEmpty());*/
+        /* String num = String.valueOf(edmonth.getText().toString().isEmpty());
+           String num2 = String.valueOf(ednext.getText().toString().isEmpty());
+           錯誤的地方...why?
+           Ans:既然都同樣適用於判斷要計算的標準，就不必再設定兩種變數（num、num2）了，還有isEmpty()裡要判斷的東西你也沒給，不！你給了！但你竟然把他寫在括號外面 */
+
+        /* 將文字做是否空值判斷，他的屬性當然是字串:TextUtils.isEmpty(java.lang.String)
+           boolean num = TextUtils.isEmpty(edmonth.getText().toString());
+           boolean num2 = TextUtils.isEmpty(ednext.getText().toString());
+           因為是判斷 ”是否“ 故使用boolean值， 你就可以直接寫成這樣：
+           if(num&&num2){
+
+           }else if(!num){
+
+            }else{
+
+             } */
+
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -59,11 +73,16 @@ public class MainActivity extends AppCompatActivity {
         String message ;
 
         if(TextUtils.isEmpty(edmonth.getText())&&TextUtils.isEmpty(ednext.getText())){ //發現：如果嫌棄TextUtils礙眼，可以利用電燈泡將其加到import中
+                                                                                       //沒有語法問題，不需打上toString()
             title = "錯誤";
             message = "無法計算";
 
         }else if(!TextUtils.isEmpty(edmonth.getText())){
             float useddegrees = Float.parseFloat(edmonth.getText().toString());
+            /*
+            這裡的toString純粹是因為語法的問題，parseFloat(java.lang.String)，故要馬你多加一個.toString()，
+            要馬就是打成 float useddegrees = Float.parseFloat(String.valueOf(edmonth.getText()));
+                                                                                             */
             if(useddegrees <11){
                 supplement = 0 ;
                 price = useddegrees * 7.35f + supplement;
@@ -79,8 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 price = useddegrees * 12.075f + supplement;
             }
             message = String.valueOf(price);
-        }
-        else{
+        }else{
             float useddegrees = Float.parseFloat(ednext.getText().toString());
             if(useddegrees <11){
                 supplement = 0 ;
